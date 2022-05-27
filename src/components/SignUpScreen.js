@@ -7,9 +7,16 @@ import axios from "axios";
 import UserContext from "../contexts/UserContext";
 
 function SignUpScreen() {
-  const { email, setEmail, password, setPassword } = useContext(UserContext);
-  const [name, setName] = useState("");
-  const [image, setImage] = useState("");
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    name,
+    setName,
+    image,
+    setImage,
+  } = useContext(UserContext);
   const navigate = useNavigate();
 
   function register(e) {
@@ -25,6 +32,13 @@ function SignUpScreen() {
       body
     );
     promise.then(() => {
+      const userInfo = {
+        email,
+        name,
+        image,
+      };
+      const stringifiedUserInfo = JSON.stringify(userInfo);
+      localStorage.setItem("userInfo", stringifiedUserInfo);
       navigate("/", { replace: true });
     });
     promise.catch(() => alert("Falha no cadastro, tente com outros dados"));
@@ -70,7 +84,7 @@ function SignUpScreen() {
           Cadastrar
         </StyledButton>
       </form>
-      <Link to="/">Não tem uma conta? Cadastre-se!</Link>
+      <Link to="/">Já tem uma conta? Faça login!</Link>
     </StyledContainer>
   );
 }

@@ -1,9 +1,18 @@
 import styled from "styled-components";
 import logo from "../assets/images/TrackIt.png";
-import gon from "../assets/images/Gon.png";
 import { useLocation } from "react-router-dom";
+import { useContext, useEffect } from "react";
+import UserContext from "../contexts/UserContext";
 
 function Header() {
+  const stringifiedUserInfo = localStorage.getItem("userInfo");
+  const userInfo = JSON.parse(stringifiedUserInfo);
+
+  useEffect(() => {
+    setImage(userInfo.image);
+  }, []);
+
+  const { image, setImage } = useContext(UserContext);
   const location = useLocation();
   function showHeader() {
     if (location.pathname !== "/" && location.pathname !== "/cadastro") {
@@ -11,7 +20,7 @@ function Header() {
         <>
           <StyledHeader>
             <img src={logo} alt="logo" />
-            <img src={gon} alt="gon-freecs" />
+            <img src={image} alt="user picture" />
           </StyledHeader>
         </>
       );

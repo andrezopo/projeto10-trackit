@@ -12,13 +12,26 @@ function App() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [token, setToken] = useState("");
+  const [name, setName] = useState("");
+  const [image, setImage] = useState("");
 
   return (
     <BrowserRouter>
-      <Header />
       <UserContext.Provider
-        value={{ email, setEmail, password, setPassword, token, setToken }}
+        value={{
+          email,
+          setEmail,
+          password,
+          setPassword,
+          token,
+          setToken,
+          name,
+          setName,
+          image,
+          setImage,
+        }}
       >
+        <Header />
         <Routes>
           <Route path="/" element={<LoginScreen />} />
           <Route path="/cadastro" element={<SignUpScreen />} />

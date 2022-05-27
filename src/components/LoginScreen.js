@@ -53,7 +53,7 @@ function LoginScreen() {
           Entrar
         </StyledButton>
       </form>
-      <Link to="/cadastro">Já tem uma conta? Faça login!</Link>
+      <Link to="/cadastro">Não tem uma conta? Cadastre-se!</Link>
     </StyledContainer>
   );
 }
