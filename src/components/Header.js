@@ -41,6 +41,9 @@ const StyledHeader = styled.div`
   align-items: center;
   justify-content: space-between;
   background-color: #4e8e57;
+  position: fixed;
+  top: 0;
+  left: 0;
 
   img:nth-child(2) {
     width: 50px;

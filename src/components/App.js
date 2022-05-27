@@ -7,6 +7,7 @@ import HistoryScreen from "./HistoryScreen";
 import LoginScreen from "./LoginScreen";
 import SignUpScreen from "./SignUpScreen";
 import TodayScreen from "./TodayScreen";
+import FooterMenu from "./FooterMenu";
 
 function App() {
   const [email, setEmail] = useState("");
@@ -39,6 +40,7 @@ function App() {
           <Route path="/hoje" element={<TodayScreen />} />
           <Route path="/historico" element={<HistoryScreen />} />
         </Routes>
+        <FooterMenu />
       </UserContext.Provider>
     </BrowserRouter>
   );
