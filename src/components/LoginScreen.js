@@ -1,17 +1,38 @@
 import StyledButton from "../styledComponents/StyledButton";
 import loginLogo from "../assets/images/LoginLogo.png";
-import styled from "styled-components";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import StyledContainer from "../styledComponents/StyledContainer";
+import axios from "axios";
+import UserContext from "../contexts/UserContext";
 
 function LoginScreen() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { email, setEmail, password, setPassword, token, setToken } =
+    useContext(UserContext);
+  const navigate = useNavigate();
+
+  function signIn(e) {
+    e.preventDefault();
+    const body = {
+      email,
+      password,
+    };
+    const promise = axios.post(
+      "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login",
+      body
+    );
+    promise.then((res) => {
+      const response = res.data;
+      setToken(response.token);
+      navigate("/hoje", { replace: true });
+    });
+    promise.catch(() => alert("Usuário e/ou senha incorretos!"));
+  }
 
   return (
-    <Container>
+    <StyledContainer>
       <img src={loginLogo} alt="login logo" />
-      <form>
+      <form onSubmit={signIn}>
         <input
           id="email"
           type="text"
@@ -28,62 +49,13 @@ function LoginScreen() {
           value={password}
           required
         />
-        <StyledButton height={45} width={300} text="Entrar" fontSize={21}>
+        <StyledButton height={45} width={300} fontSize={21}>
           Entrar
         </StyledButton>
       </form>
-      <Link to="/cadastro">Não tem uma conta? Cadastre-se!</Link>
-    </Container>
+      <Link to="/cadastro">Já tem uma conta? Faça login!</Link>
+    </StyledContainer>
   );
 }
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  font-family: "Lexend Deca", sans-serif;
-  font-size: 20px;
-
-  img {
-    width: 180px;
-    height: 180px;
-    margin: 70px auto 32px auto;
-  }
-
-  input {
-    width: 300px;
-    height: 45px;
-    margin-bottom: 6px;
-    border: 1px solid #d4d4d4;
-    border-radius: 5px;
-    ::placeholder {
-      font-family: "Lexend Deca", sans-serif;
-      font-size: 20px;
-      font-weight: 400;
-      line-height: 25px;
-      color: #dbdbdb;
-    }
-  }
-
-  a {
-    font-size: 14px;
-    line-height: 17px;
-    margin-top: 25px;
-    color: #8fc549;
-
-    &:visited {
-      color: #8fc549;
-      text-decoration: underline;
-    }
-  }
-
-  form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-`;
 
 export default LoginScreen;

@@ -1,4 +1,6 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { useState } from "react";
+import UserContext from "../contexts/UserContext";
 import HabitScreen from "./HabitScreen";
 import Header from "./Header";
 import HistoryScreen from "./HistoryScreen";
@@ -7,16 +9,24 @@ import SignUpScreen from "./SignUpScreen";
 import TodayScreen from "./TodayScreen";
 
 function App() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [token, setToken] = useState("");
+
   return (
     <BrowserRouter>
       <Header />
-      <Routes>
-        <Route path="/" element={<LoginScreen />} />
-        <Route path="/cadastro" element={<SignUpScreen />} />
-        <Route path="/habitos" element={<HabitScreen />} />
-        <Route path="/hoje" element={<TodayScreen />} />
-        <Route path="/historico" element={<HistoryScreen />} />
-      </Routes>
+      <UserContext.Provider
+        value={{ email, setEmail, password, setPassword, token, setToken }}
+      >
+        <Routes>
+          <Route path="/" element={<LoginScreen />} />
+          <Route path="/cadastro" element={<SignUpScreen />} />
+          <Route path="/habitos" element={<HabitScreen />} />
+          <Route path="/hoje" element={<TodayScreen />} />
+          <Route path="/historico" element={<HistoryScreen />} />
+        </Routes>
+      </UserContext.Provider>
     </BrowserRouter>
   );
 }
