@@ -23,7 +23,9 @@ function LoginScreen() {
     );
     promise.then((res) => {
       const response = res.data;
+
       setToken(response.token);
+
       navigate("/hoje", { replace: true });
     });
     promise.catch(() => alert("Usuário e/ou senha incorretos!"));

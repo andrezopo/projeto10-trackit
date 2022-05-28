@@ -6,6 +6,7 @@ const StyledContent = styled.div`
   flex-direction: column;
   align-items: center;
   margin: 70px 0px;
+  padding: 0 20px;
 `;
 
 export default StyledContent;
