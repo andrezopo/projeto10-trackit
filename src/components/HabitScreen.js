@@ -10,8 +10,7 @@ import StyledContent from "../styledComponents/StyledContent";
 
 function HabitScreen() {
   const navigate = useNavigate();
-  const { token, setToken } = useContext(UserContext);
-  console.log(token);
+  const { token } = useContext(UserContext);
   const [userHabits, setUserHabits] = useState([]);
 
   useEffect(() => {
@@ -50,7 +49,7 @@ function HabitScreen() {
 
   return (
     <StyledContent>
-      <IntroDiv>
+      <IntroDiv direction={"row"}>
         <div>Meus hábitos</div>
         <StyledButton width="40" height="35" fontSize="27">
           +

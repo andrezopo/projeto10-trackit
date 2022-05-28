@@ -1,11 +1,18 @@
+import axios from "axios";
 import dayjs from "dayjs";
+import { useState, useContext, useEffect } from "react";
 import styled from "styled-components";
+import UserContext from "../contexts/UserContext";
 import CommentDiv from "../styledComponents/CommentDiv";
+import IntroDiv from "../styledComponents/IntroDiv";
 import StyledContent from "../styledComponents/StyledContent";
 require("dayjs/locale/pt-br");
 
 function TodayScreen() {
+  const { token } = useContext(UserContext);
+  const [todaysHabits, setTodaysHabits] = useState([]);
   const now = dayjs().locale("pt-br");
+  const today = now.day();
   // Getting weekday first letter to be uppercase
   const weekday = now
     .format("dddd")
@@ -29,6 +36,27 @@ function TodayScreen() {
 
   const monthFormat = formatMonth();
 
+  useEffect(() => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const promise = axios.get(
+      "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits",
+      config
+    );
+    promise.then((res) => {
+      let habits = res.data;
+      habits = habits.filter((habit) => habit.days.includes(today));
+      console.log(habits);
+      setTodaysHabits(habits);
+    });
+    promise.catch(() => {
+      alert("Algo deu errado!");
+    });
+  }, []);
+
   return (
     <StyledContent>
       <IntroDiv>
@@ -40,13 +68,5 @@ function TodayScreen() {
     </StyledContent>
   );
 }
-
-const IntroDiv = styled.div`
-  width: 100%;
-  padding: 30px 20px;
-  font-size: 23px;
-  line-height: 28px;
-  color: #4e8e57;
-`;
 
 export default TodayScreen;
