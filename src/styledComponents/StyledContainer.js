@@ -44,7 +44,8 @@ const StyledContainer = styled.div`
 
   form {
     display: flex;
-    flex-direction: column;
+    flex-direction: ${(props) =>
+      props.direction ? props.direction : "column"};
     align-items: center;
     justify-content: center;
   }
