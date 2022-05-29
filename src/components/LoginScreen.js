@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import StyledContainer from "../styledComponents/StyledContainer";
 import axios from "axios";
 import UserContext from "../contexts/UserContext";
+import { ThreeDots } from "react-loader-spinner";
 
 function LoginScreen() {
   const stringifiedUserInfo = localStorage.getItem("userInfo");
@@ -13,6 +14,12 @@ function LoginScreen() {
     useContext(UserContext);
   const navigate = useNavigate();
   const [disable, setDisable] = useState(false);
+
+  if (userInfo.token) {
+    setToken(userInfo.token);
+    setImage(userInfo.image);
+    navigate("/hoje", { replace: true });
+  }
 
   function signIn(e) {
     e.preventDefault();
@@ -28,9 +35,12 @@ function LoginScreen() {
     promise.then((res) => {
       const response = res.data;
       const userInfo = {
-        email,
+        id: response.id,
         name: response.name,
         image: response.image,
+        email: response.email,
+        password: response.password,
+        token: response.token,
       };
       const stringifiedUserInfo = JSON.stringify(userInfo);
       localStorage.setItem("userInfo", stringifiedUserInfo);
@@ -69,7 +79,11 @@ function LoginScreen() {
           required
         />
         <StyledButton disabled={disable} height={45} width={300} fontSize={21}>
-          Entrar
+          {disable ? (
+            <ThreeDots color="#ffffff" width={50} height={15} />
+          ) : (
+            "Entrar"
+          )}
         </StyledButton>
       </form>
       <Link to="/cadastro">Não tem uma conta? Cadastre-se!</Link>

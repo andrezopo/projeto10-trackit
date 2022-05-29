@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import StyledContainer from "../styledComponents/StyledContainer";
 import axios from "axios";
 import UserContext from "../contexts/UserContext";
+import { ThreeDots } from "react-loader-spinner";
 
 function SignUpScreen() {
   const [disable, setDisable] = useState(false);
@@ -84,7 +85,11 @@ function SignUpScreen() {
           required
         />
         <StyledButton disabled={disable} height={45} width={300} fontSize={21}>
-          Cadastrar
+          {disable ? (
+            <ThreeDots color="#ffffff" width={50} height={15} />
+          ) : (
+            "Cadastrar"
+          )}
         </StyledButton>
       </form>
       <Link to="/">Já tem uma conta? Faça login!</Link>

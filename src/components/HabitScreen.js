@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState, useEffect, useContext } from "react";
+import { ThreeDots } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import UserContext from "../contexts/UserContext";
@@ -224,7 +225,11 @@ function HabitScreen() {
           <ConfirmCreateDiv>
             <span onClick={falseVisibility}>Cancelar</span>
             <StyledButton width="84" height="35" fontSize="16">
-              Salvar
+              {disable ? (
+                <ThreeDots color="#ffffff" width={50} height={15} />
+              ) : (
+                "Salvar"
+              )}
             </StyledButton>
           </ConfirmCreateDiv>
         </CreateHabitForm>
