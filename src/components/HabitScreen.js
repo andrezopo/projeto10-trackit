@@ -4,10 +4,12 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import UserContext from "../contexts/UserContext";
 import CommentDiv from "../styledComponents/CommentDiv";
+import HabitDiv from "../styledComponents/HabitDiv";
 import IntroDiv from "../styledComponents/IntroDiv";
 import StyledButton from "../styledComponents/StyledButton";
 import StyledContainer from "../styledComponents/StyledContainer";
 import StyledContent from "../styledComponents/StyledContent";
+import UserHabitsDiv from "../styledComponents/UserHabitsDiv";
 
 function HabitScreen() {
   const weekdays = ["D", "S", "T", "Q", "Q", "S", "S"];
@@ -261,34 +263,6 @@ const FormButton = styled.div`
   margin: 8px 2px 30px 2px;
   font-size: 20px;
   line-height: 25px;
-`;
-
-const HabitDiv = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 20px;
-  line-height: 25px;
-  color: #666666;
-  margin-top: 10px;
-  & > div {
-    font-size: 15px;
-    ion-icon {
-      margin-right: 3px;
-      transform: translateY(-8px);
-    }
-  }
-`;
-
-const UserHabitsDiv = styled.div`
-  width: 100%;
-  background-color: #ffffff;
-  border-radius: 5px;
-  margin: 5px auto;
-  & div:last-child > div {
-    margin-top: 8px;
-    margin-bottom: 15px;
-  }
 `;
 
 export default HabitScreen;

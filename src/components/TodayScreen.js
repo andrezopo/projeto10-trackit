@@ -1,16 +1,19 @@
 import axios from "axios";
 import dayjs from "dayjs";
 import { useState, useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import UserContext from "../contexts/UserContext";
 import CommentDiv from "../styledComponents/CommentDiv";
+import HabitDiv from "../styledComponents/HabitDiv";
 import IntroDiv from "../styledComponents/IntroDiv";
 import StyledContent from "../styledComponents/StyledContent";
 require("dayjs/locale/pt-br");
 
 function TodayScreen() {
+  const navigate = useNavigate();
   const { token } = useContext(UserContext);
-  const [todaysHabits, setTodaysHabits] = useState([]);
+  const [todaysHabits, setTodaysHabits] = useState(null);
   const now = dayjs().locale("pt-br");
   const today = now.day();
   // Getting weekday first letter to be uppercase
@@ -43,30 +46,135 @@ function TodayScreen() {
       },
     };
     const promise = axios.get(
-      "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits",
+      "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today",
       config
     );
     promise.then((res) => {
-      let habits = res.data;
-      habits = habits.filter((habit) => habit.days.includes(today));
-      console.log(habits);
-      setTodaysHabits(habits);
+      setTodaysHabits(res.data);
     });
     promise.catch(() => {
       alert("Algo deu errado!");
     });
   }, []);
 
-  return (
-    <StyledContent>
-      <IntroDiv>
-        <div>
-          {weekday}, {now.date()}/{monthFormat}{" "}
-        </div>
-        <CommentDiv color="#BABABA">Nenhum hábito concluído ainda</CommentDiv>
-      </IntroDiv>
-    </StyledContent>
-  );
+  function doHabit(id) {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const promise = axios.post(
+      `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}/check`,
+      null,
+      config
+    );
+    promise.then(() => {
+      navigate("/historico", { replace: true });
+      navigate("/hoje", { replace: true });
+    });
+  }
+
+  function undoHabit(id) {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const promise = axios.post(
+      `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}/uncheck`,
+      null,
+      config
+    );
+    promise.then(() => {
+      navigate("/historico", { replace: true });
+      navigate("/hoje", { replace: true });
+    });
+  }
+
+  function listHabits() {
+    if (todaysHabits !== null) {
+      return todaysHabits.map((habit, index) => {
+        return (
+          <UserHabitsDiv key={index} done={habit.done} display="flex">
+            <TodaysHabitDiv>
+              <HabitDiv>
+                <span>{habit.name}</span>
+              </HabitDiv>
+              <SequenceDiv>
+                Sequência atual: <span>{habit.currentSequence}</span>
+              </SequenceDiv>
+              <SequenceDiv>
+                Seu recorde: <span>{habit.highestSequence}</span>
+              </SequenceDiv>
+            </TodaysHabitDiv>
+            {habit.done ? (
+              <div onClick={() => undoHabit(habit.id)}>
+                <ion-icon name="checkbox"></ion-icon>
+              </div>
+            ) : (
+              <div onClick={() => doHabit(habit.id)}>
+                <ion-icon name="checkbox"></ion-icon>
+              </div>
+            )}
+          </UserHabitsDiv>
+        );
+      });
+    }
+  }
+
+  const renderHabits = listHabits();
+  if (todaysHabits !== null) {
+    return (
+      <StyledContent>
+        <IntroDiv>
+          <div>
+            {weekday}, {now.date()}/{monthFormat}{" "}
+          </div>
+          <CommentDiv color="#BABABA">Nenhum hábito concluído ainda</CommentDiv>
+        </IntroDiv>
+        {renderHabits}
+      </StyledContent>
+    );
+  } else {
+    return (
+      <StyledContent>
+        <IntroDiv>
+          <div>
+            {weekday}, {now.date()}/{monthFormat}{" "}
+          </div>
+          <CommentDiv color="#BABABA">Carregando Hábitos</CommentDiv>
+        </IntroDiv>
+      </StyledContent>
+    );
+  }
 }
+
+const SequenceDiv = styled.div`
+  font-size: 13px;
+  line-height: 17px;
+  color: #666666;
+  margin-bottom: 0px;
+`;
+
+const TodaysHabitDiv = styled.div`
+  div:nth-child(2) {
+    span {
+      color: #8fc549;
+    }
+  }
+`;
+
+const UserHabitsDiv = styled.div`
+  display: ${(props) => (props.display ? props.display : "initial")};
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 5px;
+  margin: 5px auto;
+  justify-content: space-between;
+  ion-icon {
+    color: ${(props) => (props.done ? "#8fc549" : "#e7e7e7")};
+    font-size: 69px;
+  }
+`;
 
 export default TodayScreen;
