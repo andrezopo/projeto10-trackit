@@ -7,6 +7,7 @@ const StyledContent = styled.div`
   align-items: center;
   margin: 70px 0px;
   padding: 0 20px;
+  background-color: #f2f2f2;
 `;
 
 export default StyledContent;

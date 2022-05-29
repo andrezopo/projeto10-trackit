@@ -1,6 +1,6 @@
 import StyledButton from "../styledComponents/StyledButton";
 import loginLogo from "../assets/images/LoginLogo.png";
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import StyledContainer from "../styledComponents/StyledContainer";
 import axios from "axios";

@@ -20,7 +20,7 @@ function Header() {
         <>
           <StyledHeader>
             <img src={logo} alt="logo" />
-            <img src={image} alt="user picture" />
+            <img src={image} alt="user" />
           </StyledHeader>
         </>
       );

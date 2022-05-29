@@ -36,13 +36,42 @@ function HabitScreen() {
     promise.catch(() => {
       alert("Algo deu errado!");
     });
-  }, []);
+  }, [token]);
 
   function renderHabits() {
     if (userHabits !== null) {
       if (userHabits.length !== 0) {
         return userHabits.map((habit, index) => (
-          <div key={index}>{habit.name}</div>
+          <UserHabitsDiv key={index}>
+            <HabitDiv>
+              <span>{habit.name}</span>
+              <div onClick={() => deleteHabit(habit.id)}>
+                <ion-icon name="trash-outline"></ion-icon>
+              </div>
+            </HabitDiv>
+            <FormButtonsDiv>
+              {weekdays.map((day, index) => {
+                if (habit.days.includes(index)) {
+                  return (
+                    <FormButton
+                      type="button"
+                      key={index}
+                      color="#CFCFCF"
+                      value={day}
+                    >
+                      {day}
+                    </FormButton>
+                  );
+                } else {
+                  return (
+                    <FormButton type="button" key={index} value={day}>
+                      {day}
+                    </FormButton>
+                  );
+                }
+              })}
+            </FormButtonsDiv>
+          </UserHabitsDiv>
         ));
       } else
         return (
@@ -53,6 +82,28 @@ function HabitScreen() {
         );
     }
   }
+
+  function deleteHabit(id) {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const result = window.confirm(
+      "Você tem certeza que deseja excluir este hábito?"
+    );
+    if (result) {
+      const promise = axios.delete(
+        `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}`,
+        config
+      );
+      promise.then(() => {
+        navigate("/hoje", { replace: true });
+        navigate("/habitos", { replace: true });
+      });
+    }
+  }
+
   function weekdaysForm() {
     return weekdays.map((day, index) => {
       if (habitDays.includes(index)) {
@@ -210,6 +261,34 @@ const FormButton = styled.div`
   margin: 8px 2px 30px 2px;
   font-size: 20px;
   line-height: 25px;
+`;
+
+const HabitDiv = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 20px;
+  line-height: 25px;
+  color: #666666;
+  margin-top: 10px;
+  & > div {
+    font-size: 15px;
+    ion-icon {
+      margin-right: 3px;
+      transform: translateY(-8px);
+    }
+  }
+`;
+
+const UserHabitsDiv = styled.div`
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 5px;
+  margin: 5px auto;
+  & div:last-child > div {
+    margin-top: 8px;
+    margin-bottom: 15px;
+  }
 `;
 
 export default HabitScreen;
