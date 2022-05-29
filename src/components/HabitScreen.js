@@ -35,7 +35,6 @@ function HabitScreen() {
     promise.then((res) => {
       const habits = res.data;
       setUserHabits(habits);
-      console.log(userHabits);
     });
     promise.catch(() => {
       alert("Algo deu errado!");
@@ -149,12 +148,10 @@ function HabitScreen() {
 
   function falseVisibility() {
     setVisibility(false);
-    console.log(habitDays);
   }
 
   function trueVisibility() {
     setVisibility(true);
-    console.log(habitDays);
   }
 
   function createHabit(e) {
