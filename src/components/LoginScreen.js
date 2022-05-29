@@ -7,7 +7,9 @@ import axios from "axios";
 import UserContext from "../contexts/UserContext";
 
 function LoginScreen() {
-  const { email, setEmail, password, setPassword, setToken } =
+  const stringifiedUserInfo = localStorage.getItem("userInfo");
+  const userInfo = JSON.parse(stringifiedUserInfo);
+  const { email, setEmail, password, setPassword, setToken, setImage } =
     useContext(UserContext);
   const navigate = useNavigate();
   const [disable, setDisable] = useState(false);
@@ -25,7 +27,14 @@ function LoginScreen() {
     setDisable(true);
     promise.then((res) => {
       const response = res.data;
-
+      const userInfo = {
+        email,
+        name: response.name,
+        image: response.image,
+      };
+      const stringifiedUserInfo = JSON.stringify(userInfo);
+      localStorage.setItem("userInfo", stringifiedUserInfo);
+      setImage(response.image);
       setToken(response.token);
       setDisable(false);
 

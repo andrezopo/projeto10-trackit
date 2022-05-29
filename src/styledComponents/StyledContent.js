@@ -5,8 +5,10 @@ const StyledContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 70px 0px;
+  margin-top: 70px;
+
   padding: 0 20px;
+  padding-bottom: 90px;
   background-color: #f2f2f2;
 `;
 

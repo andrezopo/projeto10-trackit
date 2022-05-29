@@ -34,13 +34,6 @@ function SignUpScreen() {
     );
     setDisable(true);
     promise.then(() => {
-      const userInfo = {
-        email,
-        name,
-        image,
-      };
-      const stringifiedUserInfo = JSON.stringify(userInfo);
-      localStorage.setItem("userInfo", stringifiedUserInfo);
       setDisable(false);
       navigate("/", { replace: true });
     });

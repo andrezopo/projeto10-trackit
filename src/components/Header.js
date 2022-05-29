@@ -5,14 +5,7 @@ import { useContext, useEffect } from "react";
 import UserContext from "../contexts/UserContext";
 
 function Header() {
-  const stringifiedUserInfo = localStorage.getItem("userInfo");
-  const userInfo = JSON.parse(stringifiedUserInfo);
-
-  useEffect(() => {
-    setImage(userInfo.image);
-  }, []);
-
-  const { image, setImage } = useContext(UserContext);
+  const { image } = useContext(UserContext);
   const location = useLocation();
   function showHeader() {
     if (location.pathname !== "/" && location.pathname !== "/cadastro") {

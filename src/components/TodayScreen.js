@@ -27,7 +27,6 @@ function TodayScreen() {
   }, []);
 
   const now = dayjs().locale("pt-br");
-  const today = now.day();
   // Getting weekday first letter to be uppercase
   const weekday = now
     .format("dddd")
