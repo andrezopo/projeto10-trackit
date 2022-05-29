@@ -15,6 +15,8 @@ function App() {
   const [token, setToken] = useState("");
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
+  const [todaysHabits, setTodaysHabits] = useState(null);
+  const [doneHabits, setDoneHabits] = useState([]);
 
   return (
     <BrowserRouter>
@@ -30,6 +32,10 @@ function App() {
           setName,
           image,
           setImage,
+          todaysHabits,
+          setTodaysHabits,
+          doneHabits,
+          setDoneHabits,
         }}
       >
         <Header />

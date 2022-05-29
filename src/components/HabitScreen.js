@@ -19,6 +19,7 @@ function HabitScreen() {
   const { token } = useContext(UserContext);
   const [userHabits, setUserHabits] = useState(null);
   const [visibility, setVisibility] = useState(false);
+  const [disable, setDisable] = useState(false);
 
   useEffect(() => {
     const config = {
@@ -111,6 +112,7 @@ function HabitScreen() {
       if (habitDays.includes(index)) {
         return (
           <FormButton
+            disabled={disable}
             type="button"
             key={index}
             color="#CFCFCF"
@@ -123,6 +125,7 @@ function HabitScreen() {
       } else {
         return (
           <FormButton
+            disabled={disable}
             type="button"
             key={index}
             onClick={() => selectDay(index)}
@@ -170,14 +173,19 @@ function HabitScreen() {
       body,
       config
     );
+    setDisable(true);
     promise.then((res) => {
       setHabitName("");
       setHabitDays([]);
+      setDisable(false);
       setVisibility(false);
       navigate("/hoje", { replace: true });
       navigate("/habitos", { replace: true });
     });
-    promise.catch(() => alert("Não foi possível criar este hábito!"));
+    promise.catch((err) => {
+      alert(err.response.statusText);
+      setDisable(false);
+    });
   }
 
   const habits = renderHabits();
@@ -196,9 +204,14 @@ function HabitScreen() {
             +
           </StyledButton>
         </IntroDiv>
-        <CreateHabitForm onSubmit={createHabit} visible={visibility}>
+        <CreateHabitForm
+          disabled={disable}
+          onSubmit={createHabit}
+          visible={visibility}
+        >
           <StyledContainer>
             <input
+              disabled={disable}
               id="habit"
               type="text"
               placeholder="nome do hábito"
@@ -231,6 +244,9 @@ function HabitScreen() {
 
 const CreateHabitForm = styled.form`
   display: ${(props) => (props.visible ? "initial" : "none")};
+  & * {
+    opacity: ${(props) => (props.disabled ? "0.7" : "1")};
+  }
 `;
 
 const ConfirmCreateDiv = styled.div`
@@ -250,7 +266,7 @@ const FormButtonsDiv = styled.div`
   display: flex;
 `;
 
-const FormButton = styled.div`
+const FormButton = styled.button`
   width: 30px;
   height: 30px;
   display: flex;

@@ -12,8 +12,20 @@ require("dayjs/locale/pt-br");
 
 function TodayScreen() {
   const navigate = useNavigate();
-  const { token } = useContext(UserContext);
-  const [todaysHabits, setTodaysHabits] = useState(null);
+  const { token, todaysHabits, setTodaysHabits, doneHabits, setDoneHabits } =
+    useContext(UserContext);
+  const [doneHabitsPercentage, setDoneHabitsPercentage] = useState(0);
+  useEffect(() => {
+    if (todaysHabits !== null && todaysHabits.length !== 0) {
+      const donePercentage =
+        (doneHabits.length / todaysHabits.length).toFixed(2) * 100;
+      setDoneHabitsPercentage(donePercentage);
+    }
+  }, [doneHabits]);
+  useEffect(() => {
+    setDoneHabits([]);
+  }, []);
+
   const now = dayjs().locale("pt-br");
   const today = now.day();
   // Getting weekday first letter to be uppercase
@@ -52,8 +64,8 @@ function TodayScreen() {
     promise.then((res) => {
       setTodaysHabits(res.data);
     });
-    promise.catch(() => {
-      alert("Algo deu errado!");
+    promise.catch((err) => {
+      alert("Algo deu errado! " + err.response.statusText);
     });
   }, []);
 
@@ -72,6 +84,9 @@ function TodayScreen() {
       navigate("/historico", { replace: true });
       navigate("/hoje", { replace: true });
     });
+    promise.catch((err) => {
+      alert(err.response.statusText);
+    });
   }
 
   function undoHabit(id) {
@@ -89,23 +104,41 @@ function TodayScreen() {
       navigate("/historico", { replace: true });
       navigate("/hoje", { replace: true });
     });
+    promise.catch((err) => {
+      alert(err.response.statusText);
+    });
   }
 
   function listHabits() {
     if (todaysHabits !== null) {
       return todaysHabits.map((habit, index) => {
+        if (habit.done) {
+          if (!doneHabits.includes(habit.id)) {
+            setDoneHabits([...doneHabits, habit.id]);
+          }
+        } else {
+          if (doneHabits.includes(habit.id)) {
+            setDoneHabits(doneHabits.filter((value) => value !== habit.id));
+          }
+        }
         return (
           <UserHabitsDiv key={index} done={habit.done} display="flex">
-            <TodaysHabitDiv>
+            <TodaysHabitDiv done={habit.done}>
               <HabitDiv>
                 <span>{habit.name}</span>
               </HabitDiv>
               <SequenceDiv>
                 Sequência atual: <span>{habit.currentSequence}</span>
               </SequenceDiv>
-              <SequenceDiv>
-                Seu recorde: <span>{habit.highestSequence}</span>
-              </SequenceDiv>
+              {habit.currentSequence === habit.highestSequence && habit.done ? (
+                <SequenceDiv color={"#8fc549"}>
+                  Seu recorde: <span>{habit.highestSequence}</span>
+                </SequenceDiv>
+              ) : (
+                <SequenceDiv>
+                  Seu recorde: <span>{habit.highestSequence}</span>
+                </SequenceDiv>
+              )}
             </TodaysHabitDiv>
             {habit.done ? (
               <div onClick={() => undoHabit(habit.id)}>
@@ -130,7 +163,13 @@ function TodayScreen() {
           <div>
             {weekday}, {now.date()}/{monthFormat}{" "}
           </div>
-          <CommentDiv color="#BABABA">Nenhum hábito concluído ainda</CommentDiv>
+          {doneHabitsPercentage ? (
+            <CommentDiv color="#8fc549">{`${doneHabitsPercentage}% dos hábitos concluídos`}</CommentDiv>
+          ) : (
+            <CommentDiv color="#BABABA">
+              Nenhum hábito concluído ainda
+            </CommentDiv>
+          )}
         </IntroDiv>
         {renderHabits}
       </StyledContent>
@@ -154,12 +193,15 @@ const SequenceDiv = styled.div`
   line-height: 17px;
   color: #666666;
   margin-bottom: 0px;
+  span {
+    color: ${(props) => (props.color ? props.color : "#666666")};
+  }
 `;
 
 const TodaysHabitDiv = styled.div`
   div:nth-child(2) {
     span {
-      color: #8fc549;
+      color: ${(props) => (props.done ? "#8fc549" : "inherit")};
     }
   }
 `;

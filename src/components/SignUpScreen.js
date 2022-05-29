@@ -1,12 +1,13 @@
 import StyledButton from "../styledComponents/StyledButton";
 import loginLogo from "../assets/images/LoginLogo.png";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import StyledContainer from "../styledComponents/StyledContainer";
 import axios from "axios";
 import UserContext from "../contexts/UserContext";
 
 function SignUpScreen() {
+  const [disable, setDisable] = useState(false);
   const {
     email,
     setEmail,
@@ -31,6 +32,7 @@ function SignUpScreen() {
       "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up",
       body
     );
+    setDisable(true);
     promise.then(() => {
       const userInfo = {
         email,
@@ -39,16 +41,21 @@ function SignUpScreen() {
       };
       const stringifiedUserInfo = JSON.stringify(userInfo);
       localStorage.setItem("userInfo", stringifiedUserInfo);
+      setDisable(false);
       navigate("/", { replace: true });
     });
-    promise.catch(() => alert("Falha no cadastro, tente com outros dados"));
+    promise.catch((err) => {
+      alert(err.message);
+      setDisable(false);
+    });
   }
 
   return (
-    <StyledContainer>
+    <StyledContainer disabled={disable}>
       <img src={loginLogo} alt="login logo" />
       <form onSubmit={register}>
         <input
+          disabled={disable}
           id="email"
           type="text"
           placeholder="email"
@@ -57,6 +64,7 @@ function SignUpScreen() {
           required
         />
         <input
+          disabled={disable}
           id="password"
           type="password"
           placeholder="senha"
@@ -65,6 +73,7 @@ function SignUpScreen() {
           required
         />
         <input
+          disabled={disable}
           id="name"
           type="text"
           placeholder="nome"
@@ -73,6 +82,7 @@ function SignUpScreen() {
           required
         />
         <input
+          disabled={disable}
           id="image"
           type="text"
           placeholder="foto"
@@ -80,7 +90,7 @@ function SignUpScreen() {
           value={image}
           required
         />
-        <StyledButton height={45} width={300} fontSize={21}>
+        <StyledButton disabled={disable} height={45} width={300} fontSize={21}>
           Cadastrar
         </StyledButton>
       </form>

@@ -1,8 +1,18 @@
+import CommentDiv from "../styledComponents/CommentDiv";
+import IntroDiv from "../styledComponents/IntroDiv";
+import StyledContent from "../styledComponents/StyledContent";
+
 function HistoryScreen() {
   return (
-    <>
-      <div>Sou a tela do histórico</div>
-    </>
+    <StyledContent>
+      <IntroDiv direction={"row"}>
+        <div>Histórico</div>
+      </IntroDiv>
+
+      <CommentDiv color="#666666">
+        Em breve você poderá ver o histórico dos seus hábitos aqui!
+      </CommentDiv>
+    </StyledContent>
   );
 }
 

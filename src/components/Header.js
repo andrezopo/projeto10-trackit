@@ -44,6 +44,7 @@ const StyledHeader = styled.div`
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 1;
 
   img:nth-child(2) {
     width: 50px;

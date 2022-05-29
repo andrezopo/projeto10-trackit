@@ -1,6 +1,6 @@
 import StyledButton from "../styledComponents/StyledButton";
 import loginLogo from "../assets/images/LoginLogo.png";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import StyledContainer from "../styledComponents/StyledContainer";
 import axios from "axios";
@@ -10,6 +10,7 @@ function LoginScreen() {
   const { email, setEmail, password, setPassword, setToken } =
     useContext(UserContext);
   const navigate = useNavigate();
+  const [disable, setDisable] = useState(false);
 
   function signIn(e) {
     e.preventDefault();
@@ -21,21 +22,27 @@ function LoginScreen() {
       "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login",
       body
     );
+    setDisable(true);
     promise.then((res) => {
       const response = res.data;
 
       setToken(response.token);
+      setDisable(false);
 
       navigate("/hoje", { replace: true });
     });
-    promise.catch(() => alert("Usuário e/ou senha incorretos!"));
+    promise.catch((err) => {
+      alert(err.message);
+      setDisable(false);
+    });
   }
 
   return (
-    <StyledContainer>
+    <StyledContainer disabled={disable}>
       <img src={loginLogo} alt="login logo" />
       <form onSubmit={signIn}>
         <input
+          disabled={disable}
           id="email"
           type="text"
           placeholder="email"
@@ -44,6 +51,7 @@ function LoginScreen() {
           required
         />
         <input
+          disabled={disable}
           id="password"
           type="password"
           placeholder="senha"
@@ -51,7 +59,7 @@ function LoginScreen() {
           value={password}
           required
         />
-        <StyledButton height={45} width={300} fontSize={21}>
+        <StyledButton disabled={disable} height={45} width={300} fontSize={21}>
           Entrar
         </StyledButton>
       </form>

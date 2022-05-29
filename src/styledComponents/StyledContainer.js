@@ -20,6 +20,9 @@ const StyledContainer = styled.div`
     margin-bottom: 6px;
     border: 1px solid #d4d4d4;
     border-radius: 5px;
+    font-size: 20px;
+    line-height: 25px;
+    font-weight: 400;
     ::placeholder {
       font-family: "Lexend Deca", sans-serif;
       font-size: 20px;
@@ -48,6 +51,7 @@ const StyledContainer = styled.div`
       props.direction ? props.direction : "column"};
     align-items: center;
     justify-content: center;
+    opacity: ${(props) => (props.disabled ? "0.7" : "1")};
   }
 `;
 

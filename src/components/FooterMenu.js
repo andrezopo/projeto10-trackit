@@ -36,6 +36,8 @@ const StyledFooter = styled.div`
   position: fixed;
   bottom: 0;
   left: 0;
+  background-color: #ffffff;
+  z-index: 1;
 
   a {
     color: inherit;
