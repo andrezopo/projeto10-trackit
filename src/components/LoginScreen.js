@@ -15,7 +15,7 @@ function LoginScreen() {
   const navigate = useNavigate();
   const [disable, setDisable] = useState(false);
 
-  if (userInfo.token) {
+  if (userInfo) {
     setToken(userInfo.token);
     setImage(userInfo.image);
     navigate("/hoje", { replace: true });
